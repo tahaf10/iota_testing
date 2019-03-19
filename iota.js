@@ -14,6 +14,8 @@ provider: 'https://nodes.devnet.iota.org:443'
         console.log(err);
     });
 */
+
+const seed = 'WFDHDHZPCLQCVL9NKEFYFMLQQJLNYFVWRCKWLIGGRMYMFWYVMTF9W9INFRYHYYZZFUMDCANODEB9LAUOL';
 const controller = {
 
     generateNewAddress: async (seed)=> {
@@ -82,11 +84,31 @@ const controller = {
         console.log(err);
         });
 
+    },
+
+    getWallet: async ()=> {
+        var addresses = [];
+        var returnString;
+
+        await iota.getNewAddress(seed, {'returnAll':true}, function(error, allAddresses) {
+	        if(error) {
+                console.log(error);
+            } else {
+                allAddresses.forEach(function(addr) { addresses.push(addr)});
+                console.log(addresses);
+                returnString = {
+                    'seed': seed,
+                    'addresses': addresses
+                }
+        
+            }
+        });
+        return returnString;
     }
 };
 
-controller.generateNewAddress('WFDHDHZPCLQCVL9NKEFYFMLQQJLNYFVWRCKWLIGGRMYMFWYVMTF9W9INFRYHYYZZFUMDCANODEB9LAUOL')
-   .then(address => console.log(address));
+//controller.generateNewAddress('WFDHDHZPCLQCVL9NKEFYFMLQQJLNYFVWRCKWLIGGRMYMFWYVMTF9W9INFRYHYYZZFUMDCANODEB9LAUOL')
+//   .then(address => console.log(address));
 
 //controller.checkBalanceThroughSeed('WFDHDHZPCLQCVL9NKEFYFMLQQJLNYFVWRCKWLIGGRMYMFWYVMTF9W9INFRYHYYZZFUMDCANODEB9LAUOL');
 
@@ -95,3 +117,6 @@ controller.generateNewAddress('WFDHDHZPCLQCVL9NKEFYFMLQQJLNYFVWRCKWLIGGRMYMFWYVM
 //controller.checkBalance(['DSB9UHMUGXM9EQSEWFJGCQMVUSCAZAGHMYBUPDGODJDWSWHEMRLZVQHNOHQWBBIDXBOVKLEPIQHBDRTBW']);
 
 //controller.transfer('WFDHDHZPCLQCVL9NKEFYFMLQQJLNYFVWRCKWLIGGRMYMFWYVMTF9W9INFRYHYYZZFUMDCANODEB9LAUOL','HELLOWORLDHELLOWORLDHELLOWORLDHELLOWORLDHELLOWORLDHELLOWORLDHELLOWORLDHELLOWORLDD');
+
+var x = controller.getWallet();
+console.log(x);
